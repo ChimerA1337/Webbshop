@@ -5,13 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="45bbeadd-7270-4f49-b0b4-3f6e7ab332e3" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/application/User.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/webapps/WEB-INF/web.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/webapps/index.jsp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/application/Item.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/application/Item.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapps/WEB-INF/web.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapps/index.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapps/index.jsp" afterDir="false" />
     </list>
     <list id="bbd291e9-7f3b-40ba-a774-e31a092486b8" name="Changes by kaleb" comment="" />
     <option name="SHOW_DIALOG" value="false" />
