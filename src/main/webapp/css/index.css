@@ -1,0 +1,70 @@
+body {
+    background-color: black;
+    color: white;
+    background-size: cover;
+    font-family: arial, sans-serif;
+    text-shadow: 2px 2px 2px grey;
+    padding: 0.3em 0.5em;
+}
+h1 {
+    display: block;
+    width: fit-content;
+    text-align: center;
+    font-family: "Press Start 2P", sans-serif;
+    background: linear-gradient(to right, skyblue, lightgreen);
+    padding: 0.3em 0.5em;
+    border-radius: 0.5em;
+    margin: 0 auto;
+}
+h2 {
+    display: block;
+    width: fit-content;
+    margin: 1em auto;
+    background: rgba(255, 255, 255, 0.2);
+    font-family: arial, sans-serif;
+    text-align: center;
+    text-decoration: lightgray underline;
+    padding: 0.3em 0.5em;
+    border-radius: 0.5em;
+}
+p {
+    font-family: arial, sans-serif;
+    text-align: left;
+    margin: 0.5em 5em;
+}
+
+input {
+    margin: 0.5em;
+    font-family: arial, sans-serif;
+    background-color: rgba(255, 255, 255, 0.4);
+    padding: 0.3em 0.5em;
+    border-radius: 0.5em;
+}
+
+button {
+    color: rgb(210, 248, 210);
+    text-decoration: bold;
+    padding: 0.5em 1em;
+    border-radius: 0.5em;
+    font-family: arial, sans-serif;
+    background-color: rgba(122, 235, 122, 0.5);
+    transition: background-color 0.15s ease-in-out;
+}
+button:hover {
+    background-color: rgba(166, 241, 166, 0.5);
+}
+
+form {
+    background-color: rgba(99, 205, 145, 0.5);
+    text-align: center;
+    margin: auto;
+    padding: 0.5em;
+    border-radius: 0.5em;
+    box-shadow: 5px 5px 15px black;
+}
+#loginForm {
+    width: fit-content;
+}
+#loginMessage {
+    text-align: center;
+}
