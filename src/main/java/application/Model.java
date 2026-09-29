@@ -44,4 +44,27 @@ public class Model {
         }
         return user;
     }
+
+    public static User register(String username, String password, PermissionLevel permissionlevel) {
+        User user = null;
+        try {
+            user = DBUser.register(dbManager.getConnection(), username, password, permissionlevel);
+        }
+        catch(SQLException sqlException) {
+            System.out.println("Failed to register." + sqlException.getMessage());
+        }
+        return user;
+    }
+
+    public static boolean usernameTaken(String username) {
+        boolean result = true;
+        try {
+            result = DBUser.usernameTaken(dbManager.getConnection(), username);
+        }
+        catch(SQLException sqlException) {
+            System.out.println("Failed to compare usernames." + sqlException.getMessage());
+        }
+        System.out.println("returning: " + result);
+        return result;
+    }
 }

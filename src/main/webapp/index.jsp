@@ -11,8 +11,9 @@
     if(user == null) {
         String username = request.getParameter("username");
         String password = request.getParameter("password");
+        System.out.println("username:" + username + ", password:" + password);
 
-        if(password != null && username != null) {
+        if(password != null && !password.isBlank() && username != null && !username.isBlank()) {
             User tempUser = Controller.login(username, password);
             if(tempUser != null) {
                 user = tempUser;
@@ -20,8 +21,9 @@
                 response.sendRedirect(request.getContextPath() + "/index.jsp");
                 return;
             }
-            else message = "Please enter a valid username and/or password.";
+            else message = "This username is taken.";
         }
+        else message = "please enter both a username and a password.";
     }
     else message = "Welcome " + user.getUsername() + "!";
 %>
@@ -30,27 +32,28 @@
 <html lang="se">
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - Webbshop</title>
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/index.css">
+    <title>Login - Webshop</title>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
     <script src="https://kit.fontawesome.com/dd581d5599.js" crossorigin="anonymous"></script>
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
 </head>
 <body>
-    <h1>Webbshop</h1>
+    <h1>Webshop</h1>
     <h2>Login</h2>
     <% if(user == null) { %>
-        <div>
-        <form method="post" action="index.jsp" id="loginForm">
+        <form method="post" action="index.jsp">
             <input type="text" placeholder="Enter username..." name="username"><br>
-            <input type="text" placeholder="Enter password..." name="password"><br>
+            <input type="text" placeholder="Enter password..." name="password"><br><br>
             <button type="submit">Submit</button>
 
+            <a href="register.jsp">
+                <h3 type="link"><i class="fa-solid fa-address-card"></i>Register</h3>
+            </a>
         </form>
-        <div>
     <% } %>
 
     <% if(message != null) { %>
-        <p id="loginMessage"><%= message %></p>
+        <p class="messages"><%= message %></p>
     <% } %>
 </body>
 </html>

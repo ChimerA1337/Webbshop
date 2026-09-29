@@ -1,5 +1,5 @@
 package application;
 
 public enum PermissionLevel {
-    Admin, Customer, None
+    Admin, Employee, Customer, None
 }

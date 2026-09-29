@@ -1,5 +1,5 @@
 body {
-    background-color: black;
+    background-color: rgb(21 23 28);
     color: white;
     background-size: cover;
     font-family: arial, sans-serif;
@@ -34,19 +34,25 @@ p {
 }
 
 input {
-    margin: 0.5em;
+    margin: 0.5em auto;
     font-family: arial, sans-serif;
     background-color: rgba(255, 255, 255, 0.4);
-    padding: 0.3em 0.5em;
+    font-size: 2.5em;
+    padding: 0.5em 0.5em;
     border-radius: 0.5em;
+}
+input[type="radio"] {
+    padding: 0;
+    margin: 0;
 }
 
 button {
     color: rgb(210, 248, 210);
-    text-decoration: bold;
+    text-decoration-style: solid;
     padding: 0.5em 1em;
     border-radius: 0.5em;
     font-family: arial, sans-serif;
+    font-size: 3em;
     background-color: rgba(122, 235, 122, 0.5);
     transition: background-color 0.15s ease-in-out;
 }
@@ -57,14 +63,23 @@ button:hover {
 form {
     background-color: rgba(99, 205, 145, 0.5);
     text-align: center;
-    margin: auto;
-    padding: 0.5em;
+    margin: 0.5em auto;
+    padding: 1.2em;
     border-radius: 0.5em;
     box-shadow: 5px 5px 15px black;
-}
-#loginForm {
     width: fit-content;
 }
-#loginMessage {
+.messages {
+    color: white;
     text-align: center;
+}
+
+#permissionLevelContainer {
+    display: block;
+    width: fit-content;
+    margin: 1em auto;
+    background-color: darkseagreen;
+    text-align: left;
+    padding: 1em;
+    border-radius: 0.5em;
 }

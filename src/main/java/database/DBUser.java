@@ -25,5 +25,42 @@ public class DBUser {
         }
         return result;
     }
+
+    public static User register(Connection connection, String username, String password, PermissionLevel permissionlevel) throws SQLException {
+        User result;
+        String query = "INSERT INTO t_user (username, password, permissionlevel) VALUES (?, ?, ?)";
+        try (PreparedStatement statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) { // RETURN_GENERATED_KEYS tillåter dig att hitta userid
+            connection.setAutoCommit(false); // Gör så att man inte automatiskt committar queryn till databasen
+            statement.setString(1, username);
+            statement.setString(2, password);
+            statement.setString(3, permissionlevel.toString());
+            statement.executeUpdate();
+
+            int userid;
+            var keysResultSet = statement.getGeneratedKeys();
+            if (keysResultSet.next()) {
+                userid = keysResultSet.getInt(1);
+            } else throw new SQLException("Failed to fetch a new userid.");
+            result = new User(userid, username, permissionlevel);
+            connection.commit();
+        } catch (SQLException exception) {
+            connection.rollback();
+            throw new SQLException(exception.getMessage());
+        } finally {
+            connection.setAutoCommit(true);
+        }
+        return result;
+    }
+
+    public static boolean usernameTaken(Connection connection, String username) throws SQLException {
+        String sql = "SELECT 1 FROM t_user WHERE username = ?";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, username);
+            try (ResultSet rs = ps.executeQuery()) {
+                System.out.println("In controller: " + rs.toString());
+                return rs.next();
+            }
+        }
+    }
 }
 

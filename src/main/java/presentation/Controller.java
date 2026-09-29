@@ -4,11 +4,6 @@ import application.*;
 import jakarta.servlet.*;
 import jakarta.servlet.http.*;
 import jakarta.servlet.annotation.*;
-import java.io.IOException;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 
 @WebServlet(name = "Controller", value = "/controller", loadOnStartup = 1)
 public class Controller extends HttpServlet {
@@ -29,5 +24,11 @@ public class Controller extends HttpServlet {
 
     static public User login(String username, String password) {
         return Model.loginUser(username, password);
+    }
+    static public User register(String username, String password, PermissionLevel permissionlevel) {
+        return Model.register(username, password, permissionlevel);
+    }
+    static public boolean usernameTaken(String username) {
+        return Model.usernameTaken(username);
     }
 }
