@@ -17,6 +17,15 @@ public class Model {
         cart = new Cart();
     }
 
+    public List<ItemDTO> getCartItems() {
+        List<ItemDTO> result = new ArrayList<>();
+        for (Item item : cart.getItems()) {
+            result.add(new ItemDTO(item.getItemId(), item.getName(),
+                    item.getPrice(), item.getDescription()));
+        }
+        return result;
+    }
+
     public static List<ItemDTO> getAllItems() {
         List<ItemDTO> result = new ArrayList<>();
         try {
@@ -34,6 +43,20 @@ public class Model {
     public void addToCart(Item item) {
         cart.addItem(item);
     }
+
+    public boolean addToCart(int itemId) {
+        try {
+            Item item = DBItem.getById(dbManager.getConnection(), itemId);
+            if (item == null) {
+                return false;
+            }
+            cart.addItem(item);
+            return true;
+        } catch (SQLException exception) {
+            throw new IllegalStateException("Could not fetch product.", exception);
+        }
+    }
+
     public void removeFromCart(Item item) {
         cart.removeItem(item);
     }
@@ -58,6 +81,42 @@ public class Model {
             return false;
         }
         return true;
+    }
+
+    public boolean placeOrder(int userId) {
+        if (cart.getItems().isEmpty()) {
+            return false;
+        }
+        Map<Integer, Integer> amounts = new TreeMap<>();
+        for (Item item : cart.getItems()) {
+            amounts.merge(item.getItemId(), 1, Integer::sum);
+        }
+        try (Connection connection = DBManager.openConnection()) {
+            connection.setAutoCommit(false);
+            try {
+                for (Map.Entry<Integer, Integer> entry : amounts.entrySet()) {
+                    if (!DBItem.decreaseStock(connection, entry.getKey(), entry.getValue())) {
+                        connection.rollback();
+                        return false;
+                    }
+                }
+                int orderId = DBOrder.create(connection, userId);
+                for (Map.Entry<Integer, Integer> entry : amounts.entrySet()) {
+                    DBOrderItem.create(connection, orderId,
+                            entry.getKey(), entry.getValue());
+                }
+                connection.commit();
+                cart.clearList();
+                return true;
+            } catch (SQLException exception) {
+                connection.rollback();
+                System.out.println("Could not place order: " + exception.getMessage());
+                return false;
+            }
+        } catch (SQLException exception) {
+            System.out.println("Database error: " + exception.getMessage());
+            return false;
+        }
     }
 
     public static User loginUser(String username, String password) {

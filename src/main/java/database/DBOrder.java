@@ -11,11 +11,23 @@ import java.util.*;
 public class DBOrder {
     public static Order get(Connection connection, int id) throws SQLException {
         Order result = null;
-        String query = "SELECT ordered, packed, shipped, userid FROM \"order\" WHERE t_orderid = ?";
+        String query = "SELECT ordered, userid FROM t_order WHERE orderid = ?";
         try(PreparedStatement statement = connection.prepareStatement(query)) {
-            connection.setAutoCommit(true);
             statement.setInt(1, id);
         }
         return result;
+    }
+
+    public static int create(Connection connection, int userId) throws SQLException {
+        String sql = "INSERT INTO t_order (ordered, userid) VALUES (CURRENT_TIMESTAMP, ?) RETURNING orderid";
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setInt(1, userId);
+            try (ResultSet result = statement.executeQuery()) {
+                if (result.next()) {
+                    return result.getInt("orderid");
+                }
+                throw new SQLException("Could not retrieve the new order ID.");
+            }
+        }
     }
 }

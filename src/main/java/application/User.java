@@ -6,7 +6,7 @@ public class User {
     private PermissionLevel permissionLevel;
 
     public User(int userId, String username, PermissionLevel permissionLevel) {
-        this.userid = userid;
+        this.userid = userId;
         this.username = username;
         this.permissionLevel = permissionLevel;
     }

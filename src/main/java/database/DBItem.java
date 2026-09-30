@@ -27,4 +27,35 @@ public class DBItem {
         }
         return items;
     }
+
+    public static Item getById(Connection connection, int itemId) throws SQLException {
+        String sql = "SELECT itemid, name, price, description FROM t_item WHERE itemid = ?";
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setInt(1, itemId);
+            try (ResultSet result = statement.executeQuery()) {
+                if (result.next()) {
+                    return new Item(
+                            result.getInt("itemid"),
+                            result.getString("name"),
+                            result.getFloat("price"),
+                            result.getString("description")
+                    );
+                }
+            }
+        }
+        return null;
+    }
+
+    public static boolean decreaseStock(Connection connection, int itemId, int amount) throws SQLException {
+        if (amount <= 0) {
+            throw new IllegalArgumentException("Amount must be positive.");
+        }
+        String sql = "UPDATE t_item SET amount = amount - ? WHERE itemid = ? AND amount >= ?";
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setInt(1, amount);
+            statement.setInt(2, itemId);
+            statement.setInt(3, amount);
+            return statement.executeUpdate() == 1;
+        }
+    }
 }

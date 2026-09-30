@@ -1,40 +1,9 @@
 <%@ page contentType="text/html; charset=UTF-8" %>
 <%@ taglib uri="jakarta.tags.core" prefix="c" %>
-<%@ page import="application.*" %>
-<%@ page import="presentation.*" %>
-<%@ page import="java.sql.SQLException" %>
-
-<%
-    User user = (User) session.getAttribute("user");
-    String message = null;
-
-    if(user == null) {
-        String username = request.getParameter("username");
-        String password = request.getParameter("password");
-        System.out.println("username:" + username + ", password:" + password);
-
-        if(password != null && !password.isBlank() && username != null && !username.isBlank()) {
-            User tempUser = Controller.login(username, password);
-            if(tempUser != null) {
-                user = tempUser;
-                session.setAttribute("user", user);
-                if (user.getPermissionlevel() == PermissionLevel.Customer) {
-                    response.sendRedirect(request.getContextPath() + "/shop.jsp");
-                } else {
-                    response.sendRedirect(request.getContextPath() + "/index.jsp");
-                }
-                return;
-            }
-            else message = "This username is taken.";
-        }
-        else message = "please enter both a username and a password.";
-    }
-    else message = "Welcome " + user.getUsername() + "!";
-%>
-
 <!DOCTYPE html>
-<html lang="se">
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - Webshop</title>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
@@ -43,25 +12,32 @@
 </head>
 <body>
     <h1>Webshop</h1>
-    <h2>Login</h2>
-    <% if(user == null) { %>
-        <form method="post" action="index.jsp">
-            <input type="text" placeholder="Enter username..." name="username"><br>
-            <input type="text" placeholder="Enter password..." name="password"><br><br>
-            <button type="submit">Submit</button>
-
-            <a href="register.jsp">
-                <h3 type="link"><i class="fa-solid fa-address-card"></i>Register</h3>
-            </a>
-        </form>
-    <% } else {%>
-        <a href="cart.jsp">
-            <h3 type="link"><i class="fa-solid fa-cart-shopping"></i>Cart</h3>
-        </a>
-    <% } %>
-
-    <% if(message != null) { %>
-        <p class="messages"><%= message %></p>
-    <% } %>
+    <c:choose>
+        <c:when test="${empty sessionScope.user}">
+            <h2>Login</h2>
+            <form method="post" action="${pageContext.request.contextPath}/controller">
+                <input type="hidden" name="action" value="login">
+                <input type="text" name="username"
+                       placeholder="Enter username..." required><br>
+                <input type="password" name="password"
+                       placeholder="Enter password..." required><br><br>
+                <button type="submit">Submit</button>
+                <a href="${pageContext.request.contextPath}/register.jsp">
+                    <h3><i class="fa-solid fa-address-card"></i> Register</h3>
+                </a>
+            </form>
+        </c:when>
+        <c:otherwise>
+            <p class="messages">
+                Welcome <c:out value="${sessionScope.user.username}"/>!
+            </p>
+            <c:if test="${sessionScope.user.permissionlevel == 'Customer'}">
+                <a href="${pageContext.request.contextPath}/controller">Open shop</a>
+            </c:if>
+        </c:otherwise>
+    </c:choose>
+    <c:if test="${not empty requestScope.message}">
+        <p class="messages"><c:out value="${requestScope.message}"/></p>
+    </c:if>
 </body>
 </html>

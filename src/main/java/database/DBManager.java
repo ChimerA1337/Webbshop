@@ -28,6 +28,10 @@ public class DBManager {
         dbConnection.close();
     }
 
+    public static Connection openConnection() throws SQLException {
+        return DriverManager.getConnection(URL, USERNAME, PASSWORD);
+    }
+
     public Connection getConnection() {
         return dbConnection;
     }
