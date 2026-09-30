@@ -11,10 +11,11 @@ import java.util.*;
 public class DBOrder {
     public static Order get(Connection connection, int id) throws SQLException {
         Order result = null;
-        String query = "SELECT ordered, packed, shipped, userid FROM \"order\" WHERE orderid = ?";
+        String query = "SELECT ordered, packed, shipped, userid FROM \"order\" WHERE t_orderid = ?";
         try(PreparedStatement statement = connection.prepareStatement(query)) {
             connection.setAutoCommit(true);
             statement.setInt(1, id);
         }
+        return result;
     }
 }

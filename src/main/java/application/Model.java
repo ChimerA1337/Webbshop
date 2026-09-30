@@ -11,6 +11,32 @@ import java.util.*;
 
 public class Model {
     static DBManager dbManager;
+    private final Cart cart;
+
+    public Model() {
+        cart = new Cart();
+    }
+
+    public static List<ItemDTO> getAllItems() {
+        List<ItemDTO> result = new ArrayList<>();
+        try {
+            List<Item> items = DBItem.getAll(dbManager.getConnection());
+            for (Item item : items) {
+                result.add(new ItemDTO(item.getItemId(), item.getName(),
+                        item.getPrice(), item.getDescription()));
+            }
+        } catch (SQLException exception) {
+            throw new IllegalStateException("Could not fetch items.", exception);
+        }
+        return result;
+    }
+
+    public void addToCart(Item item) {
+        cart.addItem(item);
+    }
+    public void removeFromCart(Item item) {
+        cart.removeItem(item);
+    }
 
     public static boolean initialize() {
         dbManager = new DBManager();

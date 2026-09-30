@@ -18,7 +18,11 @@
             if(tempUser != null) {
                 user = tempUser;
                 session.setAttribute("user", user);
-                response.sendRedirect(request.getContextPath() + "/index.jsp");
+                if (user.getPermissionlevel() == PermissionLevel.Customer) {
+                    response.sendRedirect(request.getContextPath() + "/shop.jsp");
+                } else {
+                    response.sendRedirect(request.getContextPath() + "/index.jsp");
+                }
                 return;
             }
             else message = "This username is taken.";
