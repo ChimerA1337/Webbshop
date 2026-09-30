@@ -27,6 +27,9 @@ h2 {
     padding: 0.3em 0.5em;
     border-radius: 0.5em;
 }
+h3 {
+    text-align: center;
+}
 p {
     font-family: arial, sans-serif;
     text-align: left;

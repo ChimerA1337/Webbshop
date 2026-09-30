@@ -50,6 +50,10 @@
                 <h3 type="link"><i class="fa-solid fa-address-card"></i>Register</h3>
             </a>
         </form>
+    <% } else {%>
+        <a href="cart.jsp">
+            <h3 type="link"><i class="fa-solid fa-cart-shopping"></i>Cart</h3>
+        </a>
     <% } %>
 
     <% if(message != null) { %>
