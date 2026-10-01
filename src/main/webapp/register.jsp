@@ -38,7 +38,6 @@
     <title>Register - Webshop</title>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
     <script src="https://kit.fontawesome.com/dd581d5599.js" crossorigin="anonymous"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
 </head>
 <body>
     <% if(user == null) { %>
@@ -56,7 +55,7 @@
         </form>
     <% } else {%>
         <a href="index.jsp">
-            <h2 type="link"><i class="fa-solid fa-address-card"></i>Go to login page</h2>
+            <h2 type="link"><i class="fa-solid fa-address-card" class="link"></i>Go to login page</h2>
         </a>
     <% } %>
 

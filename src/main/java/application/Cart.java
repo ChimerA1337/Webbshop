@@ -6,9 +6,7 @@ import java.util.List;
 public class Cart {
     private final List<Item> items = new ArrayList<>();
 
-    public void addItem(Item item) {
-        items.add(item);
-    }
+    public void addItem(Item item) { items.add(item); }
     public void removeItem(Item item) {
         items.remove(item);
     }

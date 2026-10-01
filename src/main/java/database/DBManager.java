@@ -8,8 +8,6 @@ public class DBManager {
     private static final String USERNAME = "postgres.bjpawpwxkskfocseqzvc";
     private static final String PASSWORD = "MantuFirni#123";
 
-    //private static final String ConnectionString = "postgresql://postgres:MantuFirni#123@db.bjpawpwxkskfocseqzvc.supabase.co:5432/postgres";
-
     private Connection dbConnection;
 
     public boolean connect() throws SQLException {
@@ -35,6 +33,4 @@ public class DBManager {
     public Connection getConnection() {
         return dbConnection;
     }
-
-
 }

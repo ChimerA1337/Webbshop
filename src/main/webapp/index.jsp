@@ -17,10 +17,8 @@
             <h2>Login</h2>
             <form method="post" action="${pageContext.request.contextPath}/controller">
                 <input type="hidden" name="action" value="login">
-                <input type="text" name="username"
-                       placeholder="Enter username..." required><br>
-                <input type="password" name="password"
-                       placeholder="Enter password..." required><br><br>
+                <input type="text" name="username" placeholder="Enter username..." required><br>
+                <input type="password" name="password" placeholder="Enter password..." required><br><br>
                 <button type="submit">Submit</button>
                 <a href="${pageContext.request.contextPath}/register.jsp">
                     <h3><i class="fa-solid fa-address-card"></i> Register</h3>
@@ -32,7 +30,13 @@
                 Welcome <c:out value="${sessionScope.user.username}"/>!
             </p>
             <c:if test="${sessionScope.user.permissionlevel == 'Customer'}">
-                <a href="${pageContext.request.contextPath}/controller">Open shop</a>
+                <a href="${pageContext.request.contextPath}/controller" class="link"><i class="fa-solid fa-basket-shopping"></i>Open Shop<i class="fa-solid fa-basket-shopping"></i></a>
+            </c:if>
+            <c:if test="${sessionScope.user.permissionlevel == 'Admin'}">
+                <a href="${pageContext.request.contextPath}/controller?action=users" class="link"><i class="fa-solid fa-user-tie"></i>Open Administrator Menu<i class="fa-solid fa-user-tie"></i></a>
+            </c:if>
+            <c:if test="${sessionScope.user.permissionlevel == 'Employee'}">
+                <a href="${pageContext.request.contextPath}/controller" class="link"><i class="fa-solid fa-user-gear"></i>Open Orders Menu<i class="fa-solid fa-user-gear"></i></a>
             </c:if>
         </c:otherwise>
     </c:choose>

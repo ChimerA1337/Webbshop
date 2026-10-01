@@ -33,13 +33,6 @@ public class Controller extends HttpServlet {
         return model;
     }
 
-    public static void addToCart(HttpSession session, Item item) {
-        getModel(session).addToCart(item);
-    }
-    public static void removeFromCart(HttpSession session, Item item) {
-        getModel(session).removeFromCart(item);
-    }
-
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -57,6 +50,7 @@ public class Controller extends HttpServlet {
             }
             if ("cart".equals(action)) {
                 request.setAttribute("items", getModel(session).getCartItems());
+                request.setAttribute("total", getModel(session).getCartTotal());
                 request.setAttribute("message", session.getAttribute("message"));
                 session.removeAttribute("message");
                 request.getRequestDispatcher("/cart.jsp").forward(request, response);
@@ -66,9 +60,33 @@ public class Controller extends HttpServlet {
             }
             return;
         }
-        if (user != null && user.getPermissionlevel() == PermissionLevel.Customer) {
-            response.sendRedirect(request.getContextPath() + "/shop.jsp");
+        if ("users".equals(action)) {
+            if (user == null || user.getPermissionlevel() != PermissionLevel.Admin) {
+                response.sendRedirect(request.getContextPath() + "/controller");
+                return;
+            }
+            request.setAttribute("users", Controller.getAllUsers());
+            request.getRequestDispatcher("/admin.jsp").forward(request, response);
             return;
+        }
+        if(user != null) {
+            switch(user.getPermissionlevel()) {
+                case PermissionLevel.Customer:
+                    response.sendRedirect(request.getContextPath() + "/shop.jsp");
+                    return;
+                case PermissionLevel.Employee:
+                    response.sendRedirect(request.getContextPath() + "/orders.jsp");
+                    return;
+                case PermissionLevel.Admin:
+                    request.setAttribute("users", Controller.getAllUsers());
+                    response.sendRedirect(request.getContextPath() + "/admin.jsp");
+                    return;
+                case PermissionLevel.None:
+                    response.sendRedirect(request.getContextPath() + "/index.jsp");
+                    return;
+                default:
+                    throw new IOException("User not registered as a real class.");
+            }
         }
         request.getRequestDispatcher("/index.jsp").forward(request, response);
     }
@@ -150,17 +168,26 @@ public class Controller extends HttpServlet {
         response.sendRedirect(request.getContextPath() + "/controller");
     }
 
-    public static List<ItemDTO> getAllItems() {
-        return Model.getAllItems();
-    }
-
-    static public User login(String username, String password) {
+    public static User login(String username, String password) {
         return Model.loginUser(username, password);
     }
-    static public User register(String username, String password, PermissionLevel permissionlevel) {
+    public static boolean usernameTaken(String username) {
+        return Model.usernameTaken(username);
+    }
+    public static User register(String username, String password, PermissionLevel permissionlevel) {
         return Model.register(username, password, permissionlevel);
     }
-    static public boolean usernameTaken(String username) {
-        return Model.usernameTaken(username);
+    public static List<User> getAllUsers() {
+        return Model.getAllUsers();
+    }
+
+    public static void addToCart(HttpSession session, Item item) {
+        getModel(session).addToCart(item);
+    }
+    public static void removeFromCart(HttpSession session, Item item) {
+        getModel(session).removeFromCart(item);
+    }
+    public static List<Item> getAllItems() {
+        return Model.getAllItems();
     }
 }

@@ -1,12 +1,12 @@
 package application;
 
 public class User {
-    private int userid;
+    private final int userid;
     private String username;
     private PermissionLevel permissionLevel;
 
-    public User(int userId, String username, PermissionLevel permissionLevel) {
-        this.userid = userId;
+    public User(int userid, String username, PermissionLevel permissionLevel) {
+        this.userid = userid;
         this.username = username;
         this.permissionLevel = permissionLevel;
     }

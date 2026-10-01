@@ -11,19 +11,24 @@
     <h1>Cart</h1>
     <c:choose>
         <c:when test="${empty requestScope.items}">
-            <p>Cart is empty.</p>
+            <p class="darkGreenContainer">Cart is empty.</p>
         </c:when>
         <c:otherwise>
-            <c:forEach var="item" items="${requestScope.items}">
-                <div>
-                    <h2><c:out value="${item.name}"/></h2>
-                    <p>Pris: <c:out value="${item.price}"/> kr</p>
+            <c:forEach var="line" items="${requestScope.items}">
+                <div class="darkGreenContainer">
+                    <h2><c:out value="${line.item.name}"/></h2>
+                    <div class="lightGreenContainer">
+                        <p>Pris: <c:out value="${line.item.price}"/> kr</p>
+                        <p>Amount: <c:out value="${line.quantity}"/> item(s)</p>
+                        <p>Total: <c:out value="${line.item.price * line.quantity}"/> kr</p>
+                    </div>
                 </div>
             </c:forEach>
         </c:otherwise>
     </c:choose>
     <c:if test="${not empty requestScope.items}">
         <form method="post" action="${pageContext.request.contextPath}/controller">
+            <p>Order Total Cost: <c:out value="${requestScope.total}"/></p><br> <!-- works? -->
             <input type="hidden" name="action" value="placeOrder">
             <button type="submit">Place order</button>
         </form>

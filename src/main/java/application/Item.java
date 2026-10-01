@@ -1,30 +1,27 @@
 package application;
 
 public class Item {
+    private final int itemid;
     private String name;
     private float price;
     private String description;
+    private int amount;
 
-
-    private final int itemId;
-
-    public Item(int itemId, String name, float price, String description) {
-        this.itemId = itemId;
+    public Item(int itemid, String name, float price, String description, int amount) {
+        this.itemid = itemid;
         this.name = name;
         this.price = price;
         this.description = description;
+        this.amount = amount;
     }
 
-    public int getItemId() {
-        return itemId;
+    public int getItemid() {
+        return itemid;
     }
-    protected String getName() { return name; }
+    public String getName() { return name; }
     public float getPrice() { return price; }
-    protected String getDescription() { return description; }
-
-    protected void setName(String name) { this.name = name; }
-    protected void setPrice(float price) { this.price = price; }
-    protected void setDescription(String description) { this.description = description; }
+    public String getDescription() { return description; }
+    public int getAmount() { return amount; }
 
     @Override
     public String toString() {

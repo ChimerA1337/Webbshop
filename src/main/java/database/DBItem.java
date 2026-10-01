@@ -12,7 +12,7 @@ import java.util.List;
 public class DBItem {
     public static List<Item> getAll(Connection connection) throws SQLException {
         List<Item> items = new ArrayList<>();
-        String sql = "SELECT itemid, name, price, description FROM t_item";
+        String sql = "SELECT itemid, name, price, description, amount FROM t_item";
         try (PreparedStatement statement = connection.prepareStatement(sql);
              ResultSet result = statement.executeQuery()) {
             while (result.next()) {
@@ -20,7 +20,8 @@ public class DBItem {
                         result.getInt("itemid"),
                         result.getString("name"),
                         result.getFloat("price"),
-                        result.getString("description")
+                        result.getString("description"),
+                        result.getInt("amount")
                 );
                 items.add(item);
             }
@@ -29,7 +30,7 @@ public class DBItem {
     }
 
     public static Item getById(Connection connection, int itemId) throws SQLException {
-        String sql = "SELECT itemid, name, price, description FROM t_item WHERE itemid = ?";
+        String sql = "SELECT itemid, name, price, description, amount FROM t_item WHERE itemid = ?";
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setInt(1, itemId);
             try (ResultSet result = statement.executeQuery()) {
@@ -38,7 +39,8 @@ public class DBItem {
                             result.getInt("itemid"),
                             result.getString("name"),
                             result.getFloat("price"),
-                            result.getString("description")
+                            result.getString("description"),
+                            result.getInt("amount")
                     );
                 }
             }
@@ -58,4 +60,6 @@ public class DBItem {
             return statement.executeUpdate() == 1;
         }
     }
+
+
 }

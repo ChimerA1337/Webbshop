@@ -40,7 +40,7 @@ input {
     margin: 0.5em auto;
     font-family: arial, sans-serif;
     background-color: rgba(255, 255, 255, 0.4);
-    font-size: 2.5em;
+    font-size: 1em;
     padding: 0.5em 0.5em;
     border-radius: 0.5em;
 }
@@ -55,7 +55,7 @@ button {
     padding: 0.5em 1em;
     border-radius: 0.5em;
     font-family: arial, sans-serif;
-    font-size: 3em;
+    font-size: 1em;
     background-color: rgba(122, 235, 122, 0.5);
     transition: background-color 0.15s ease-in-out;
 }
@@ -77,12 +77,49 @@ form {
     text-align: center;
 }
 
-#permissionLevelContainer {
+.darkGreenContainer {
     display: block;
     width: fit-content;
-    margin: 1em auto;
+    margin: 0.1em auto;
+    background-color: rgba(99, 205, 145, 0.5);
+    text-align: left;
+    padding: 0.1em;
+    border-radius: 0.5em;
+}
+.lightGreenContainer {
+    display: block;
+    width: fit-content;
+    margin: 0.1em auto;
     background-color: darkseagreen;
     text-align: left;
-    padding: 1em;
+    padding: 0.1em;
     border-radius: 0.5em;
+}
+
+.link {
+    text-align: center;
+    display: block;
+    background-color: rgba(99, 205, 145, 0.5);
+    width: fit-content;
+    margin: 0.5em auto;
+    padding: 1.2em;
+    border-radius: 0.5em;
+    box-shadow: 5px 5px 15px black;
+}
+
+#adminUserTable {
+    text-align: center;
+    display: block;
+    width: 80%;
+    padding: 0.5em;
+    border-radius: 0.5em;
+}
+.adminUserTableHeader {
+    background: linear-gradient(to right, darkblue, darkgreen);
+    text-align: center;
+    color: white;
+}
+.adminUserTableElement {
+    background: linear-gradient(to right, lightblue, lightgreen);
+    text-align: center;
 }
