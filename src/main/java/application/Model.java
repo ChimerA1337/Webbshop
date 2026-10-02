@@ -193,15 +193,62 @@ public class Model {
         }
     }
 
-    public List<Order> getOrders(int userId) {
-        List<Order> result = null;
-        try {
-            result = DBOrder.getAll(dbManager.getConnection());
+    public static List<Order> getAllOrders() {
+        try (Connection connection = DBManager.openConnection()) {
+            return DBOrder.getAll(connection);
+        } catch (SQLException exception) {
+            throw new IllegalStateException("Could not fetch orders.", exception);
         }
-        catch(SQLException exception) {
-            System.out.println("Could not get all orders of this userId." + exception.getMessage());
+    }
+
+    public static boolean addItem(String name, float price, String description, int amount) {
+        if (name == null || name.isBlank() || !Float.isFinite(price)
+                || price < 0 || amount < 0) {
+            return false;
         }
-        return result;
+        try (Connection connection = DBManager.openConnection()) {
+            return DBItem.create(connection, name.trim(), price, description, amount);
+        } catch (SQLException exception) {
+            System.out.println("Could not create item: " + exception.getMessage());
+            return false;
+        }
+    }
+    public static boolean deleteItem(int itemId) {
+        try (Connection connection = DBManager.openConnection()) {
+            return DBItem.delete(connection, itemId);
+        } catch (SQLException exception) {
+            System.out.println("Could not delete item: " + exception.getMessage());
+            return false;
+        }
+    }
+    public static boolean deleteUser(int userId) {
+        try (Connection connection = DBManager.openConnection()) {
+            return DBUser.delete(connection, userId);
+        } catch (SQLException exception) {
+            System.out.println("Could not delete user: " + exception.getMessage());
+            return false;
+        }
+    }
+
+    public static boolean packOrder(int orderId) {
+        try (Connection connection = DBManager.openConnection()) {
+            return DBOrder.pack(connection, orderId);
+        } catch (SQLException exception) {
+            System.out.println("Could not pack order: " + exception.getMessage());
+            return false;
+        }
+    }
+
+    public static boolean restockItem(int itemId, int amount) {
+        if (amount <= 0) {
+            return false;
+        }
+        try (Connection connection = DBManager.openConnection()) {
+            return DBItem.restock(connection, itemId, amount);
+        } catch (SQLException exception) {
+            System.out.println("Could not restock item: " + exception.getMessage());
+            return false;
+        }
     }
 }
 

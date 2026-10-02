@@ -61,11 +61,15 @@ public class Controller extends HttpServlet {
             return;
         }
         if ("users".equals(action)) {
+            System.out.println("Sessionens roll: " + (user == null ? "Inte inloggad" : user.getPermissionlevel()));
             if (user == null || user.getPermissionlevel() != PermissionLevel.Admin) {
-                response.sendRedirect(request.getContextPath() + "/controller");
+                response.sendError(HttpServletResponse.SC_FORBIDDEN);
                 return;
             }
-            request.setAttribute("users", Controller.getAllUsers());
+            request.setAttribute("users", Model.getAllUsers());
+            request.setAttribute("items", Model.getAllItems());
+            request.setAttribute("message", session.getAttribute("message"));
+            session.removeAttribute("message");
             request.getRequestDispatcher("/admin.jsp").forward(request, response);
             return;
         }
@@ -75,11 +79,12 @@ public class Controller extends HttpServlet {
                     response.sendRedirect(request.getContextPath() + "/shop.jsp");
                     return;
                 case PermissionLevel.Employee:
-                    response.sendRedirect(request.getContextPath() + "/orders.jsp");
+                    request.setAttribute("items", Model.getAllItems());
+                    request.setAttribute("orders", Model.getAllOrders());
+                    request.getRequestDispatcher("/orders.jsp").forward(request, response);
                     return;
                 case PermissionLevel.Admin:
-                    request.setAttribute("users", Controller.getAllUsers());
-                    response.sendRedirect(request.getContextPath() + "/admin.jsp");
+                    response.sendRedirect(request.getContextPath() + "/controller?action=users");
                     return;
                 case PermissionLevel.None:
                     response.sendRedirect(request.getContextPath() + "/index.jsp");
@@ -95,6 +100,71 @@ public class Controller extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
         String action = request.getParameter("action");
+        if ("packOrder".equals(action) || "restockItem".equals(action)) {
+            HttpSession session = request.getSession();
+            User user = (User) session.getAttribute("user");
+
+            if (user == null || user.getPermissionlevel() != PermissionLevel.Employee) {
+                response.sendError(HttpServletResponse.SC_FORBIDDEN);
+                return;
+            }
+
+            try {
+                boolean success;
+                if ("packOrder".equals(action)) {
+                    int orderId = Integer.parseInt(request.getParameter("orderid"));
+                    success = Model.packOrder(orderId);
+                } else {
+                    int itemId = Integer.parseInt(request.getParameter("itemid"));
+                    int amount = Integer.parseInt(request.getParameter("amount"));
+                    success = Model.restockItem(itemId, amount);
+                }
+
+                session.setAttribute("message",
+                        success ? "Change saved." : "Could not save change.");
+            } catch (NumberFormatException exception) {
+                session.setAttribute("message", "Enter valid numbers.");
+            }
+
+            response.sendRedirect(request.getContextPath() + "/controller");
+            return;
+        }
+        if ("addItem".equals(action) || "deleteItem".equals(action) || "deleteUser".equals(action)) {
+            HttpSession session = request.getSession();
+            User user = (User) session.getAttribute("user");
+            if (user == null || user.getPermissionlevel() != PermissionLevel.Admin) {
+                response.sendError(HttpServletResponse.SC_FORBIDDEN);
+                return;
+            }
+            try {
+                boolean success;
+                if ("addItem".equals(action)) {
+                    String name = request.getParameter("name");
+                    String description = request.getParameter("description");
+                    float price = Float.parseFloat(request.getParameter("price"));
+                    int amount = Integer.parseInt(request.getParameter("amount"));
+                    success = Model.addItem(name, price, description, amount);
+                } else if ("deleteItem".equals(action)) {
+                    int itemId = Integer.parseInt(request.getParameter("itemid"));
+                    success = Model.deleteItem(itemId);
+                } else {
+                    int userId = Integer.parseInt(request.getParameter("userid"));
+                    if (userId == user.getUserid()) {
+                        session.setAttribute("message", "You cannot delete your own account.");
+                        response.sendRedirect(request.getContextPath() + "/controller?action=users");
+                        return;
+                    }
+                    success = Model.deleteUser(userId);
+                }
+                session.setAttribute("message", success
+                        ? "Change saved."
+                        : "Could not save change. Check the values or existing order references.");
+            } catch (NumberFormatException exception) {
+                session.setAttribute("message", "Enter valid numbers.");
+            }
+            response.sendRedirect(request.getContextPath() + "/controller?action=users");
+            return;
+        }
         if ("addToCart".equals(action)) {
             HttpSession session = request.getSession();
             User user = (User) session.getAttribute("user");

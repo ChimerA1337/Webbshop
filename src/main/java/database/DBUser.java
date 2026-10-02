@@ -79,5 +79,19 @@ public class DBUser {
         }
         return users;
     }
+
+    public static boolean delete(Connection connection, int userId) throws SQLException {
+        String sql = """
+        DELETE FROM t_user
+        WHERE userid = ?
+        AND NOT EXISTS (
+            SELECT 1 FROM t_order WHERE userid = t_user.userid
+        )
+        """;
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setInt(1, userId);
+            return statement.executeUpdate() == 1;
+        }
+    }
 }
 

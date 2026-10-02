@@ -20,13 +20,13 @@ public class DBOrderItem {
 
     public static List<OrderItem> getForOrder(Connection connection, int orderId) throws SQLException {
         List<OrderItem> items = new ArrayList<>();
-        String query = "SELECT productid, amount FROM t_order_item WHERE orderid = ?";
+        String query = "SELECT itemid, amount FROM t_order_item WHERE orderid = ?";
         try (PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setInt(1, orderId);
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
                 items.add(new OrderItem(
-                        resultSet.getInt("productid"),
+                        resultSet.getInt("itemid"),
                         resultSet.getInt("amount")
                 ));
             }

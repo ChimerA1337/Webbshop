@@ -60,4 +60,12 @@ public class DBOrder {
             throw new SQLException("Could not retrieve the new order ID.");
         }
     }
+    public static boolean pack(Connection connection, int orderId) throws SQLException {
+        String sql = "UPDATE t_order SET packed = CURRENT_TIMESTAMP WHERE orderid = ? AND packed IS NULL";
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setInt(1, orderId);
+            return statement.executeUpdate() == 1;
+        }
+    }
+
 }
