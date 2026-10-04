@@ -31,13 +31,15 @@
         <div>
             <form method="post" action="${pageContext.request.contextPath}/controller">
                 <h2><c:out value="${item.name}"/></h2>
-                <p>Price: <c:out value="${item.price}"/> kr</p>
-                <p>Description: <c:out value="${item.description}"/></p>
-                <p>Category: <c:out value="${item.category}"/></p>
-                <p>In Stock: <c:out value="${item.amount}"/> items</p>
+                <div class="lightGreenContainer">
+                    <p>Price: <c:out value="${item.price}"/> kr</p>
+                    <p>Description: <c:out value="${item.description}"/></p>
+                    <p>Category: <c:out value="${item.category}"/></p>
+                    <p>In Stock: <c:out value="${item.amount}"/> items</p>
+                </div>
                 <input type="hidden" name="action" value="addToCart">
                 <input type="hidden" name="itemid" value="${item.itemid}">
-                <button type="submit">Add to cart</button>
+                <button type="submit" id="shopSubmitButton">Add to cart</button>
             </form>
         </div>
     </c:forEach>

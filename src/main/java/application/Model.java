@@ -76,7 +76,6 @@ public class Model {
         List<User> result = new ArrayList<>();
         try {
             List<User> users = DBUser.getAllUsers(dbManager.getConnection());
-            // Apparently might not be necessary?
             for(User user : users) {
                 result.add(new User(
                         user.getUserid(),
@@ -113,7 +112,7 @@ public class Model {
     }
 
     public List<CartLine> getCartItems() {
-        Map<Integer, Integer> quantities = new LinkedHashMap<>();   // preserves insertion order
+        Map<Integer, Integer> quantities = new LinkedHashMap<>();
         Map<Integer, Item> itemsById = new LinkedHashMap<>();
 
         for (Item item : cart.getItems()) {

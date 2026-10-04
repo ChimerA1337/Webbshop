@@ -1,4 +1,3 @@
-/* ===== Design tokens ===== */
 :root {
     --bg: #0f1117;
     --bg-elevated: #161925;
@@ -27,7 +26,6 @@
     --font-display: "Press Start 2P", var(--font);
 }
 
-/* ===== Base ===== */
 * {
     box-sizing: border-box;
 }
@@ -39,20 +37,19 @@ body {
             radial-gradient(circle at 85% 20%, rgba(94, 160, 255, 0.07), transparent 45%);
     background-attachment: fixed;
     color: var(--text);
-    font-family: var(--font);
+    font-family: var(--font), sans-serif;
     text-shadow: none;
     padding: 2em 1.2em 4em;
     line-height: 1.5;
     min-height: 100vh;
 }
 
-/* ===== Headings ===== */
 h1 {
     display: block;
     width: fit-content;
     text-align: center;
-    font-family: var(--font-display);
-    font-size: 1.1em;
+    font-family: var(--font-display), sans-serif;
+    font-size: 1.5em;
     line-height: 1.6;
     color: #10141c;
     background: linear-gradient(135deg, var(--accent), var(--info));
@@ -69,7 +66,7 @@ h2 {
     margin: 0 auto 1em;
     background: var(--surface);
     border: 1px solid var(--border);
-    font-family: var(--font);
+    font-family: var(--font), sans-serif;
     font-weight: 600;
     font-size: 1.15em;
     text-align: center;
@@ -87,13 +84,12 @@ h3 {
 }
 
 p {
-    font-family: var(--font);
+    font-family: var(--font), sans-serif;
     text-align: left;
     color: var(--text-muted);
     margin: 0.35em 0;
 }
 
-/* ===== Forms & inputs ===== */
 form {
     background: var(--surface);
     border: 1px solid var(--border);
@@ -118,7 +114,7 @@ input,
 select,
 textarea {
     margin: 0.35em auto;
-    font-family: var(--font);
+    font-family: var(--font), sans-serif;
     color: var(--text);
     background-color: var(--surface-light);
     border: 1px solid var(--border);
@@ -168,19 +164,22 @@ textarea {
     margin: 0 0 0 0.3em;
 }
 
-/* ===== Buttons ===== */
 button {
     color: #0d1117;
     font-weight: 600;
     padding: 0.6em 1.3em;
     border: none;
     border-radius: var(--radius);
-    font-family: var(--font);
+    font-family: var(--font), sans-serif;
     font-size: 0.95em;
     background: linear-gradient(135deg, var(--accent), var(--accent-strong));
     cursor: pointer;
     transition: transform 0.12s ease-in-out, box-shadow 0.12s ease-in-out, filter 0.12s ease-in-out;
     margin-top: 0.4em;
+}
+#shopSubmitButton {
+    display: block;
+    margin: 0.4em auto 0;
 }
 
 button:hover {
@@ -191,15 +190,14 @@ button:hover {
 button:active {
     transform: translateY(1px);
 }
-
-/* Delete-style buttons: give any button inside a delete form a danger look */
-form:has(input[value="deleteItem"]) button,
-form:has(input[value="deleteUser"]) button {
+.deleteButton {
     background: linear-gradient(135deg, var(--danger), var(--danger-strong));
     color: #1a0d0d;
 }
+.deleteButton:hover {
+    box-shadow: 0 3px 10px rgba(239, 106, 106, 0.4);
+}
 
-/* ===== Links / nav buttons ===== */
 .link {
     text-align: center;
     display: flex;
@@ -228,7 +226,6 @@ a {
     color: var(--accent);
 }
 
-/* ===== Message banners ===== */
 .messages {
     color: var(--text);
     text-align: center;
@@ -241,7 +238,6 @@ a {
     border-radius: var(--radius);
 }
 
-/* ===== Product / cart / user cards ===== */
 .darkGreenContainer {
     display: block;
     width: min(560px, 92vw);
@@ -258,7 +254,7 @@ a {
     display: block;
     width: fit-content;
     min-width: 60%;
-    margin: 0.6em 0 0;
+    margin: 0.6em auto 0;
     background: var(--accent-soft);
     border: 1px solid var(--accent-soft-border);
     text-align: left;
@@ -271,19 +267,16 @@ a {
     margin: 0.2em 0;
 }
 
-/* Product cards on shop.jsp (plain <div> wrapping a <form>) */
 body > div,
 .darkGreenContainer form {
     margin: 0.7em auto;
 }
 
-/* Give every "product card" form the same card treatment as containers above */
 form:has(input[name="itemid"]):not(:has(input[value="deleteItem"])):not(:has(input[value="packOrder"])):not(:has(input[value="restockItem"])):not(:has(input[value="updateItemCategory"])) {
     width: min(420px, 92vw);
     text-align: left;
 }
 
-/* ===== Tables (users / items / orders) ===== */
 table {
     border-collapse: collapse;
     width: min(900px, 95vw);

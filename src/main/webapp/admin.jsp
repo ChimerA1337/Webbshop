@@ -32,7 +32,7 @@
                     <form method="post" action="${pageContext.request.contextPath}/controller">
                         <input type="hidden" name="action" value="deleteUser">
                         <input type="hidden" name="userid" value="${user.userid}">
-                        <button type="submit">Delete</button>
+                        <button type="submit" class="deleteButton">Delete</button>
                     </form>
                 </td>
             </tr>
@@ -83,7 +83,7 @@
                     <form method="post" action="${pageContext.request.contextPath}/controller">
                         <input type="hidden" name="action" value="deleteItem">
                         <input type="hidden" name="itemid" value="${item.itemid}">
-                        <button type="submit">Delete</button>
+                        <button type="submit" class="deleteButton">Delete</button>
                     </form>
                 </td>
             </tr>
