@@ -1,125 +1,381 @@
-body {
-    background-color: rgb(21 23 28);
-    color: white;
-    background-size: cover;
-    font-family: arial, sans-serif;
-    text-shadow: 2px 2px 2px grey;
-    padding: 0.3em 0.5em;
+/* ===== Design tokens ===== */
+:root {
+    --bg: #0f1117;
+    --bg-elevated: #161925;
+    --surface: #1c2030;
+    --surface-light: #242a3d;
+    --border: #2d3348;
+
+    --text: #e8eaf0;
+    --text-muted: #9aa1b5;
+
+    --accent: #4fd1a5;
+    --accent-strong: #2fb98a;
+    --accent-soft: rgba(79, 209, 165, 0.14);
+    --accent-soft-border: rgba(79, 209, 165, 0.35);
+
+    --info: #5ea0ff;
+
+    --danger: #ef6a6a;
+    --danger-strong: #d94f4f;
+
+    --radius: 0.6em;
+    --radius-lg: 1em;
+    --shadow: 0 6px 20px rgba(0, 0, 0, 0.35);
+
+    --font: "Inter", "Segoe UI", Arial, sans-serif;
+    --font-display: "Press Start 2P", var(--font);
 }
+
+/* ===== Base ===== */
+* {
+    box-sizing: border-box;
+}
+
+body {
+    background: var(--bg);
+    background-image:
+            radial-gradient(circle at 15% 0%, rgba(79, 209, 165, 0.08), transparent 45%),
+            radial-gradient(circle at 85% 20%, rgba(94, 160, 255, 0.07), transparent 45%);
+    background-attachment: fixed;
+    color: var(--text);
+    font-family: var(--font);
+    text-shadow: none;
+    padding: 2em 1.2em 4em;
+    line-height: 1.5;
+    min-height: 100vh;
+}
+
+/* ===== Headings ===== */
 h1 {
     display: block;
     width: fit-content;
     text-align: center;
-    font-family: "Press Start 2P", sans-serif;
-    background: linear-gradient(to right, skyblue, lightgreen);
-    padding: 0.3em 0.5em;
-    border-radius: 0.5em;
-    margin: 0 auto;
+    font-family: var(--font-display);
+    font-size: 1.1em;
+    line-height: 1.6;
+    color: #10141c;
+    background: linear-gradient(135deg, var(--accent), var(--info));
+    padding: 0.7em 1.1em;
+    border-radius: var(--radius-lg);
+    margin: 0 auto 1.4em;
+    box-shadow: var(--shadow);
+    letter-spacing: 0.02em;
 }
+
 h2 {
     display: block;
     width: fit-content;
-    margin: 1em auto;
-    background: rgba(255, 255, 255, 0.2);
-    font-family: arial, sans-serif;
+    margin: 0 auto 1em;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    font-family: var(--font);
+    font-weight: 600;
+    font-size: 1.15em;
     text-align: center;
-    text-decoration: lightgray underline;
-    padding: 0.3em 0.5em;
-    border-radius: 0.5em;
+    text-decoration: none;
+    color: var(--accent);
+    padding: 0.5em 1.1em;
+    border-radius: var(--radius);
 }
+
 h3 {
     text-align: center;
+    font-weight: 600;
+    color: var(--text);
+    margin: 0.3em 0;
 }
+
 p {
-    font-family: arial, sans-serif;
+    font-family: var(--font);
     text-align: left;
-    margin: 0.5em 5em;
+    color: var(--text-muted);
+    margin: 0.35em 0;
 }
 
-input {
-    margin: 0.5em auto;
-    font-family: arial, sans-serif;
-    background-color: rgba(255, 255, 255, 0.4);
-    font-size: 1em;
-    padding: 0.5em 0.5em;
-    border-radius: 0.5em;
-}
-input[type="radio"] {
-    padding: 0;
-    margin: 0;
-}
-
-button {
-    color: rgb(210, 248, 210);
-    text-decoration-style: solid;
-    padding: 0.5em 1em;
-    border-radius: 0.5em;
-    font-family: arial, sans-serif;
-    font-size: 1em;
-    background-color: rgba(122, 235, 122, 0.5);
-    transition: background-color 0.15s ease-in-out;
-}
-button:hover {
-    background-color: rgba(166, 241, 166, 0.5);
-}
-
+/* ===== Forms & inputs ===== */
 form {
-    background-color: rgba(99, 205, 145, 0.5);
+    background: var(--surface);
+    border: 1px solid var(--border);
     text-align: center;
-    margin: 0.5em auto;
-    padding: 1.2em;
-    border-radius: 0.5em;
-    box-shadow: 5px 5px 15px black;
+    margin: 0.7em auto;
+    padding: 1.4em;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow);
     width: fit-content;
-}
-.messages {
-    color: white;
-    text-align: center;
+    max-width: 90vw;
 }
 
+label {
+    display: block;
+    text-align: left;
+    font-size: 0.85em;
+    color: var(--text-muted);
+    margin: 0.6em 0.1em 0.2em;
+}
+
+input,
+select,
+textarea {
+    margin: 0.35em auto;
+    font-family: var(--font);
+    color: var(--text);
+    background-color: var(--surface-light);
+    border: 1px solid var(--border);
+    font-size: 1em;
+    padding: 0.55em 0.7em;
+    border-radius: var(--radius);
+    width: 100%;
+    max-width: 320px;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+input::placeholder,
+textarea::placeholder {
+    color: var(--text-muted);
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px var(--accent-soft);
+}
+
+input[type="radio"] {
+    width: auto;
+    padding: 0;
+    margin: 0 0.4em 0 0;
+    accent-color: var(--accent);
+}
+
+input[type="number"] {
+    max-width: 110px;
+}
+
+textarea {
+    min-height: 5em;
+    resize: vertical;
+}
+
+#permissionLevelContainer {
+    text-align: left;
+    margin: 0.6em 0;
+}
+#permissionLevelContainer label {
+    display: inline;
+    margin: 0 0 0 0.3em;
+}
+
+/* ===== Buttons ===== */
+button {
+    color: #0d1117;
+    font-weight: 600;
+    padding: 0.6em 1.3em;
+    border: none;
+    border-radius: var(--radius);
+    font-family: var(--font);
+    font-size: 0.95em;
+    background: linear-gradient(135deg, var(--accent), var(--accent-strong));
+    cursor: pointer;
+    transition: transform 0.12s ease-in-out, box-shadow 0.12s ease-in-out, filter 0.12s ease-in-out;
+    margin-top: 0.4em;
+}
+
+button:hover {
+    filter: brightness(1.08);
+    box-shadow: 0 3px 10px rgba(79, 209, 165, 0.35);
+}
+
+button:active {
+    transform: translateY(1px);
+}
+
+/* Delete-style buttons: give any button inside a delete form a danger look */
+form:has(input[value="deleteItem"]) button,
+form:has(input[value="deleteUser"]) button {
+    background: linear-gradient(135deg, var(--danger), var(--danger-strong));
+    color: #1a0d0d;
+}
+
+/* ===== Links / nav buttons ===== */
+.link {
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5em;
+    background: var(--surface);
+    border: 1px solid var(--accent-soft-border);
+    color: var(--accent);
+    text-decoration: none;
+    font-weight: 600;
+    width: fit-content;
+    margin: 0.6em auto;
+    padding: 0.9em 1.4em;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    transition: background 0.15s ease-in-out, transform 0.12s ease-in-out;
+}
+
+.link:hover {
+    background: var(--accent-soft);
+    transform: translateY(-1px);
+}
+
+a {
+    color: var(--accent);
+}
+
+/* ===== Message banners ===== */
+.messages {
+    color: var(--text);
+    text-align: center;
+    width: fit-content;
+    margin: 0.8em auto;
+    padding: 0.6em 1.1em;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--info);
+    border-radius: var(--radius);
+}
+
+/* ===== Product / cart / user cards ===== */
 .darkGreenContainer {
     display: block;
-    width: fit-content;
-    margin: 0.1em auto;
-    background-color: rgba(99, 205, 145, 0.5);
+    width: min(560px, 92vw);
+    margin: 0.7em auto;
+    background: var(--surface);
+    border: 1px solid var(--border);
     text-align: left;
-    padding: 0.1em;
-    border-radius: 0.5em;
+    padding: 1em 1.2em;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow);
 }
+
 .lightGreenContainer {
     display: block;
     width: fit-content;
-    margin: 0.1em auto;
-    background-color: darkseagreen;
+    min-width: 60%;
+    margin: 0.6em 0 0;
+    background: var(--accent-soft);
+    border: 1px solid var(--accent-soft-border);
     text-align: left;
-    padding: 0.1em;
-    border-radius: 0.5em;
+    padding: 0.6em 0.9em;
+    border-radius: var(--radius);
 }
 
-.link {
-    text-align: center;
-    display: block;
-    background-color: rgba(99, 205, 145, 0.5);
-    width: fit-content;
-    margin: 0.5em auto;
-    padding: 1.2em;
-    border-radius: 0.5em;
-    box-shadow: 5px 5px 15px black;
+.lightGreenContainer p {
+    color: var(--text);
+    margin: 0.2em 0;
 }
 
-#adminUserTable {
-    text-align: center;
-    display: block;
-    width: 80%;
-    padding: 0.5em;
-    border-radius: 0.5em;
+/* Product cards on shop.jsp (plain <div> wrapping a <form>) */
+body > div,
+.darkGreenContainer form {
+    margin: 0.7em auto;
 }
+
+/* Give every "product card" form the same card treatment as containers above */
+form:has(input[name="itemid"]):not(:has(input[value="deleteItem"])):not(:has(input[value="packOrder"])):not(:has(input[value="restockItem"])):not(:has(input[value="updateItemCategory"])) {
+    width: min(420px, 92vw);
+    text-align: left;
+}
+
+/* ===== Tables (users / items / orders) ===== */
+table {
+    border-collapse: collapse;
+    width: min(900px, 95vw);
+    margin: 0.5em auto 1.6em;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    box-shadow: var(--shadow);
+}
+
+th,
+td {
+    padding: 0.7em 0.9em;
+    text-align: center;
+    border-bottom: 1px solid var(--border);
+    font-size: 0.95em;
+}
+
+th {
+    background: linear-gradient(135deg, #1b2130, #202840);
+    color: var(--accent);
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.78em;
+    letter-spacing: 0.04em;
+}
+
+tr:last-child td {
+    border-bottom: none;
+}
+
+tbody tr:hover td,
+tr:not(.adminUserTableHeader):hover td {
+    background: var(--surface-light);
+}
+
+td form {
+    margin: 0;
+    padding: 0.4em;
+    box-shadow: none;
+    background: transparent;
+    border: none;
+    width: auto;
+}
+
+td select {
+    width: auto;
+    min-width: 140px;
+}
+
+/* Legacy admin table classes, restyled to match the shared table look */
+#adminUserTable,
+#adminItemTable {
+    text-align: center;
+    width: min(900px, 95vw);
+}
+
 .adminUserTableHeader {
-    background: linear-gradient(to right, darkblue, darkgreen);
-    text-align: center;
-    color: white;
+    background: linear-gradient(135deg, #1b2130, #202840);
+    color: var(--accent);
 }
+.adminUserTableHeader th {
+    color: var(--accent);
+}
+
 .adminUserTableElement {
-    background: linear-gradient(to right, lightblue, lightgreen);
-    text-align: center;
+    background: transparent;
+}
+.adminUserTableElement:hover {
+    background: var(--surface-light);
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 640px) {
+    body {
+        padding: 1.2em 0.6em 3em;
+    }
+
+    h1 {
+        font-size: 0.8em;
+    }
+
+    table,
+    #adminUserTable,
+    #adminItemTable {
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+    }
+
+    form {
+        width: 100%;
+    }
 }
