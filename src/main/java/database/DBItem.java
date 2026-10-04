@@ -89,6 +89,16 @@ public class DBItem {
             return statement.executeUpdate() == 1;
         }
     }
+    public static boolean updateCategory(Connection connection, int itemId, Category category) throws SQLException {
+        String sql = "UPDATE t_item SET category = ? WHERE itemid = ?";
+
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setString(1, category.name());
+            statement.setInt(2, itemId);
+
+            return statement.executeUpdate() == 1;
+        }
+    }
 
     public static boolean restock(Connection connection, int itemId, int amount) throws SQLException {
         String sql = "UPDATE t_item SET amount = amount + ? WHERE itemid = ?";

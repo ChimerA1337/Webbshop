@@ -45,6 +45,7 @@
             <th>Item ID</th>
             <th>Name</th>
             <th>Price</th>
+            <th>Category</th>
             <th>Stock</th>
             <th>Delete</th>
         </tr>
@@ -54,6 +55,30 @@
                 <td><c:out value="${item.name}"/></td>
                 <td><c:out value="${item.price}"/></td>
                 <td><c:out value="${item.amount}"/></td>
+                <td>
+                    <form method="post" action="${pageContext.request.contextPath}/controller">
+                        <input type="hidden" name="action" value="updateItemCategory">
+                        <input type="hidden" name="itemid" value="${item.itemid}">
+                        <select name="category" aria-label="Category" required>
+
+                            <c:forEach var="category" items="${requestScope.categories}">
+                                <c:choose>
+                                    <c:when test="${category == item.category}">
+                                        <option value="${category}" selected>
+                                            <c:out value="${category}"/>
+                                        </option>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <option value="${category}">
+                                            <c:out value="${category}"/>
+                                        </option>
+                                    </c:otherwise>
+                                </c:choose>
+                            </c:forEach>
+                        </select>
+                        <button type="submit">Save category</button>
+                    </form>
+                </td>
                 <td>
                     <form method="post" action="${pageContext.request.contextPath}/controller">
                         <input type="hidden" name="action" value="deleteItem">
@@ -84,6 +109,15 @@
         <label for="amount">Stock</label>
         <input id="amount" type="number" name="amount" min="0" step="1" required>
         <br>
+
+        <label for="category">Category</label>
+        <select id="category" name="category" required>
+            <c:forEach var="category" items="${requestScope.categories}">
+                <option value="${category}">
+                    <c:out value="${category}"/>
+                </option>
+            </c:forEach>
+        </select>
 
         <button type="submit">Add product</button>
     </form>

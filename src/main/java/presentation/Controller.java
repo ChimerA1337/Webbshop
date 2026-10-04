@@ -69,6 +69,7 @@ public class Controller extends HttpServlet {
             request.setAttribute("users", Model.getAllUsers());
             request.setAttribute("items", Model.getAllItems());
             request.setAttribute("message", session.getAttribute("message"));
+            request.setAttribute("categories", Category.values());
             session.removeAttribute("message");
             request.getRequestDispatcher("/admin.jsp").forward(request, response);
             return;
@@ -129,7 +130,7 @@ public class Controller extends HttpServlet {
             response.sendRedirect(request.getContextPath() + "/controller");
             return;
         }
-        if ("addItem".equals(action) || "deleteItem".equals(action) || "deleteUser".equals(action)) {
+        if ("addItem".equals(action) || "deleteItem".equals(action) || "deleteUser".equals(action) || "updateItemCategory".equals(action)) {
             HttpSession session = request.getSession();
             User user = (User) session.getAttribute("user");
             if (user == null || user.getPermissionlevel() != PermissionLevel.Admin) {
@@ -148,6 +149,18 @@ public class Controller extends HttpServlet {
                 } else if ("deleteItem".equals(action)) {
                     int itemId = Integer.parseInt(request.getParameter("itemid"));
                     success = Model.deleteItem(itemId);
+                } else if ("updateItemCategory".equals(action)) {
+                    int itemId = Integer.parseInt(request.getParameter("itemid"));
+
+                    String categoryText = request.getParameter("category");
+
+                    if (categoryText == null || categoryText.isBlank()) {
+                        throw new IllegalArgumentException("Choose a category.");
+                    }
+
+                    Category category = Category.valueOf(categoryText);
+
+                    success = Model.updateItemCategory(itemId, category);
                 } else {
                     int userId = Integer.parseInt(request.getParameter("userid"));
                     if (userId == user.getUserid()) {
@@ -162,6 +175,8 @@ public class Controller extends HttpServlet {
                         : "Could not save change. Check the values or existing order references.");
             } catch (NumberFormatException exception) {
                 session.setAttribute("message", "Enter valid numbers.");
+            } catch (IllegalArgumentException exception) {
+                session.setAttribute("message", "Choose a valid category.");
             }
             response.sendRedirect(request.getContextPath() + "/controller?action=users");
             return;

@@ -222,6 +222,22 @@ public class Model {
             return false;
         }
     }
+    public static boolean updateItemCategory(int itemId, Category category) {
+        if (itemId <= 0 || category == null) {
+            return false;
+        }
+
+        try (Connection connection = DBManager.openConnection()) {
+            return DBItem.updateCategory(connection, itemId, category);
+
+        } catch (SQLException exception) {
+            System.out.println(
+                    "Could not update category: " + exception.getMessage()
+            );
+            return false;
+        }
+    }
+
     public static boolean deleteUser(int userId) {
         try (Connection connection = DBManager.openConnection()) {
             return DBUser.delete(connection, userId);
