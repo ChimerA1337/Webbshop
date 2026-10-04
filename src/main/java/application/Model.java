@@ -101,7 +101,8 @@ public class Model {
                         item.getName(),
                         item.getPrice(),
                         item.getDescription(),
-                        item.getAmount())
+                        item.getAmount(),
+                        item.getCategory())
                 );
             }
         }
@@ -201,13 +202,13 @@ public class Model {
         }
     }
 
-    public static boolean addItem(String name, float price, String description, int amount) {
+    public static boolean addItem(String name, float price, String description, int amount, Category category) {
         if (name == null || name.isBlank() || !Float.isFinite(price)
                 || price < 0 || amount < 0) {
             return false;
         }
         try (Connection connection = DBManager.openConnection()) {
-            return DBItem.create(connection, name.trim(), price, description, amount);
+            return DBItem.create(connection, name.trim(), price, description, amount, category);
         } catch (SQLException exception) {
             System.out.println("Could not create item: " + exception.getMessage());
             return false;

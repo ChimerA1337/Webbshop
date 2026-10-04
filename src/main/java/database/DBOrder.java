@@ -67,5 +67,4 @@ public class DBOrder {
             return statement.executeUpdate() == 1;
         }
     }
-
 }

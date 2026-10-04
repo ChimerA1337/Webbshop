@@ -6,13 +6,15 @@ public class Item {
     private float price;
     private String description;
     private int amount;
+    private Category category;
 
-    public Item(int itemid, String name, float price, String description, int amount) {
+    public Item(int itemid, String name, float price, String description, int amount, Category category) {
         this.itemid = itemid;
         this.name = name;
         this.price = price;
         this.description = description;
         this.amount = amount;
+        this.category = category;
     }
 
     public int getItemid() {
@@ -22,13 +24,17 @@ public class Item {
     public float getPrice() { return price; }
     public String getDescription() { return description; }
     public int getAmount() { return amount; }
+    public Category getCategory() { return category; }
 
     @Override
     public String toString() {
         return "Item{" +
-                "name='" + name + '\'' +
+                "itemid=" + itemid +
+                ", name='" + name + '\'' +
                 ", price=" + price +
                 ", description='" + description + '\'' +
+                ", amount=" + amount +
+                ", category=" + category +
                 '}';
     }
 }

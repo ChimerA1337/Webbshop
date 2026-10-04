@@ -1,6 +1,7 @@
 package database;
 
 import application.Item;
+import application.Category;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -12,7 +13,7 @@ import java.util.List;
 public class DBItem {
     public static List<Item> getAll(Connection connection) throws SQLException {
         List<Item> items = new ArrayList<>();
-        String sql = "SELECT itemid, name, price, description, amount FROM t_item";
+        String sql = "SELECT itemid, name, price, description, amount, category FROM t_item";
         try (PreparedStatement statement = connection.prepareStatement(sql);
              ResultSet result = statement.executeQuery()) {
             while (result.next()) {
@@ -21,7 +22,8 @@ public class DBItem {
                         result.getString("name"),
                         result.getFloat("price"),
                         result.getString("description"),
-                        result.getInt("amount")
+                        result.getInt("amount"),
+                        Category.valueOf(result.getString("category"))
                 );
                 items.add(item);
             }
@@ -30,7 +32,7 @@ public class DBItem {
     }
 
     public static Item getById(Connection connection, int itemId) throws SQLException {
-        String sql = "SELECT itemid, name, price, description, amount FROM t_item WHERE itemid = ?";
+        String sql = "SELECT itemid, name, price, description, amount, category FROM t_item WHERE itemid = ?";
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setInt(1, itemId);
             try (ResultSet result = statement.executeQuery()) {
@@ -40,7 +42,8 @@ public class DBItem {
                             result.getString("name"),
                             result.getFloat("price"),
                             result.getString("description"),
-                            result.getInt("amount")
+                            result.getInt("amount"),
+                            Category.valueOf(result.getString("category"))
                     );
                 }
             }
@@ -62,13 +65,14 @@ public class DBItem {
     }
 
     public static boolean create(Connection connection, String name, float price,
-                                 String description, int amount) throws SQLException {
-        String sql = "INSERT INTO t_item (name, price, description, amount) VALUES (?, ?, ?, ?)";
+                                 String description, int amount, Category category) throws SQLException {
+        String sql = "INSERT INTO t_item (name, price, description, amount, category) VALUES (?, ?, ?, ?, ?)";
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setString(1, name);
             statement.setFloat(2, price);
             statement.setString(3, description);
             statement.setInt(4, amount);
+            statement.setString(5, category.toString());
             return statement.executeUpdate() == 1;
         }
     }

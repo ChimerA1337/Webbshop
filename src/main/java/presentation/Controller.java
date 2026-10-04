@@ -143,7 +143,8 @@ public class Controller extends HttpServlet {
                     String description = request.getParameter("description");
                     float price = Float.parseFloat(request.getParameter("price"));
                     int amount = Integer.parseInt(request.getParameter("amount"));
-                    success = Model.addItem(name, price, description, amount);
+                    Category category = Category.valueOf(request.getParameter("category"));
+                    success = Model.addItem(name, price, description, amount, category);
                 } else if ("deleteItem".equals(action)) {
                     int itemId = Integer.parseInt(request.getParameter("itemid"));
                     success = Model.deleteItem(itemId);
