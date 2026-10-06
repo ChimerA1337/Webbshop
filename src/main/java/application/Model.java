@@ -2,11 +2,8 @@ package application;
 
 import database.*;
 
-import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 import java.sql.*;
-import java.sql.Date;
-import java.time.LocalDate;
 import java.util.*;
 
 public class Model {
@@ -38,7 +35,7 @@ public class Model {
         return true;
     }
 
-    public static User loginUser(String username, String password) {
+    public static UserDTO loginUser(String username, String password) {
         User user = null;
         try {
             user = DBUser.login(dbManager.getConnection(), username, password);
@@ -46,10 +43,10 @@ public class Model {
         catch(SQLException sqlException) {
             System.out.println("Failed to login." + sqlException.getMessage());
         }
-        return user;
+        return toDTO(user);
     }
 
-    public static User register(String username, String password, PermissionLevel permissionlevel) {
+    public static UserDTO register(String username, String password, PermissionLevel permissionlevel) {
         User user = null;
         try {
             user = DBUser.register(dbManager.getConnection(), username, password, permissionlevel);
@@ -57,7 +54,7 @@ public class Model {
         catch(SQLException sqlException) {
             System.out.println("Failed to register." + sqlException.getMessage());
         }
-        return user;
+        return toDTO(user);
     }
 
     public static boolean usernameTaken(String username) {
@@ -72,46 +69,35 @@ public class Model {
         return result;
     }
 
-    public static List<User> getAllUsers() {
-        List<User> result = new ArrayList<>();
+    public static List<UserDTO> getAllUsers() {
+        List<UserDTO> result = new ArrayList<>();
         try {
             List<User> users = DBUser.getAllUsers(dbManager.getConnection());
             for(User user : users) {
-                result.add(new User(
-                        user.getUserid(),
-                        user.getUsername(),
-                        user.getPermissionlevel()
-                ));
+                result.add(toDTO(user));
             }
         }
         catch(SQLException exception) {
             throw new IllegalStateException("Could not fetch users.", exception);
         }
-        return result;
+        return List.copyOf(result);
     }
 
-    public static List<Item> getAllItems() {
-        List<Item> result = new ArrayList<>();
+    public static List<ItemDTO> getAllItems() {
+        List<ItemDTO> result = new ArrayList<>();
         try {
             List<Item> items = DBItem.getAll(dbManager.getConnection());
             for (Item item : items) {
-                result.add(new Item(
-                        item.getItemid(),
-                        item.getName(),
-                        item.getPrice(),
-                        item.getDescription(),
-                        item.getAmount(),
-                        item.getCategory())
-                );
+                result.add(toDTO(item));
             }
         }
         catch (SQLException exception) {
             throw new IllegalStateException("Could not fetch items.", exception);
         }
-        return result;
+        return List.copyOf(result);
     }
 
-    public List<CartLine> getCartItems() {
+    public List<CartLineDTO> getCartItems() {
         Map<Integer, Integer> quantities = new LinkedHashMap<>();
         Map<Integer, Item> itemsById = new LinkedHashMap<>();
 
@@ -120,12 +106,12 @@ public class Model {
             itemsById.putIfAbsent(item.getItemid(), item);
         }
 
-        List<CartLine> result = new ArrayList<>();
+        List<CartLineDTO> result = new ArrayList<>();
         for (Map.Entry<Integer, Integer> entry : quantities.entrySet()) {
             Item item = itemsById.get(entry.getKey());
-            result.add(new CartLine(item, entry.getValue()));
+            result.add(new CartLineDTO(toDTO(item), entry.getValue()));
         }
-        return result;
+        return List.copyOf(result);
     }
 
     public float getCartTotal() {
@@ -134,10 +120,6 @@ public class Model {
             total += item.getPrice();
         }
         return total;
-    }
-
-    public void addToCart(Item item) {
-        cart.addItem(item);
     }
 
     public boolean addToCart(int itemId) {
@@ -153,8 +135,13 @@ public class Model {
         }
     }
 
-    public void removeFromCart(Item item) {
-        cart.removeItem(item);
+    public void removeFromCart(int itemId) {
+        for (Item item : cart.getItems()) {
+            if (item.getItemid() == itemId) {
+                cart.removeItem(item);
+                return;
+            }
+        }
     }
 
     public boolean placeOrder(int userId) {
@@ -193,12 +180,27 @@ public class Model {
         }
     }
 
-    public static List<Order> getAllOrders() {
+    public static List<OrderDTO> getAllOrders() {
         try (Connection connection = DBManager.openConnection()) {
-            return DBOrder.getAll(connection);
+            List<OrderDTO> result = new ArrayList<>();
+            for (Order order : DBOrder.getAll(connection)) {
+                result.add(new OrderDTO(order.getOrderid(), order.getOrdered(),
+                        order.getPacked(), order.getUserid()));
+            }
+            return List.copyOf(result);
         } catch (SQLException exception) {
             throw new IllegalStateException("Could not fetch orders.", exception);
         }
+    }
+
+    private static ItemDTO toDTO(Item item) {
+        return new ItemDTO(item.getItemid(), item.getName(), item.getPrice(),
+                item.getDescription(), item.getAmount(), item.getCategory());
+    }
+
+    private static UserDTO toDTO(User user) {
+        return user == null ? null : new UserDTO(user.getUserid(), user.getUsername(),
+                user.getPermissionlevel());
     }
 
     public static boolean addItem(String name, float price, String description, int amount, Category category) {

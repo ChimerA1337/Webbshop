@@ -1,6 +1,10 @@
 package presentation;
 
-import application.*;
+import application.Model;
+import application.Category;
+import application.PermissionLevel;
+import application.ItemDTO;
+import application.UserDTO;
 import jakarta.servlet.*;
 import jakarta.servlet.http.*;
 import jakarta.servlet.annotation.*;
@@ -37,7 +41,7 @@ public class Controller extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         HttpSession session = request.getSession();
-        User user = (User) session.getAttribute("user");
+        UserDTO user = (UserDTO) session.getAttribute("user");
         String action = request.getParameter("action");
         if ("cart".equals(action) || "shop".equals(action)) {
             if (user == null) {
@@ -103,7 +107,7 @@ public class Controller extends HttpServlet {
         String action = request.getParameter("action");
         if ("packOrder".equals(action) || "restockItem".equals(action)) {
             HttpSession session = request.getSession();
-            User user = (User) session.getAttribute("user");
+            UserDTO user = (UserDTO) session.getAttribute("user");
 
             if (user == null || user.getPermissionlevel() != PermissionLevel.Employee) {
                 response.sendError(HttpServletResponse.SC_FORBIDDEN);
@@ -132,7 +136,7 @@ public class Controller extends HttpServlet {
         }
         if ("addItem".equals(action) || "deleteItem".equals(action) || "deleteUser".equals(action) || "updateItemCategory".equals(action)) {
             HttpSession session = request.getSession();
-            User user = (User) session.getAttribute("user");
+            UserDTO user = (UserDTO) session.getAttribute("user");
             if (user == null || user.getPermissionlevel() != PermissionLevel.Admin) {
                 response.sendError(HttpServletResponse.SC_FORBIDDEN);
                 return;
@@ -183,7 +187,7 @@ public class Controller extends HttpServlet {
         }
         if ("addToCart".equals(action)) {
             HttpSession session = request.getSession();
-            User user = (User) session.getAttribute("user");
+            UserDTO user = (UserDTO) session.getAttribute("user");
             int itemId;
             try {
                 itemId = Integer.parseInt(request.getParameter("itemid"));
@@ -201,7 +205,7 @@ public class Controller extends HttpServlet {
         }
         if ("placeOrder".equals(action)) {
             HttpSession session = request.getSession();
-            User user = (User) session.getAttribute("user");
+            UserDTO user = (UserDTO) session.getAttribute("user");
             if (user == null) {
                 response.sendRedirect(request.getContextPath() + "/controller");
                 return;
@@ -241,7 +245,7 @@ public class Controller extends HttpServlet {
             request.getRequestDispatcher("/index.jsp").forward(request, response);
             return;
         }
-        User user = Model.loginUser(username, password);
+        UserDTO user = Model.loginUser(username, password);
         if (user == null) {
             request.setAttribute("message", "Incorrect username or password.");
             request.getRequestDispatcher("/index.jsp").forward(request, response);
@@ -254,26 +258,26 @@ public class Controller extends HttpServlet {
         response.sendRedirect(request.getContextPath() + "/controller");
     }
 
-    public static User login(String username, String password) {
+    public static UserDTO login(String username, String password) {
         return Model.loginUser(username, password);
     }
     public static boolean usernameTaken(String username) {
         return Model.usernameTaken(username);
     }
-    public static User register(String username, String password, PermissionLevel permissionlevel) {
+    public static UserDTO register(String username, String password, PermissionLevel permissionlevel) {
         return Model.register(username, password, permissionlevel);
     }
-    public static List<User> getAllUsers() {
+    public static List<UserDTO> getAllUsers() {
         return Model.getAllUsers();
     }
 
-    public static void addToCart(HttpSession session, Item item) {
-        getModel(session).addToCart(item);
+    public static void addToCart(HttpSession session, int itemId) {
+        getModel(session).addToCart(itemId);
     }
-    public static void removeFromCart(HttpSession session, Item item) {
-        getModel(session).removeFromCart(item);
+    public static void removeFromCart(HttpSession session, int itemId) {
+        getModel(session).removeFromCart(itemId);
     }
-    public static List<Item> getAllItems() {
+    public static List<ItemDTO> getAllItems() {
         return Model.getAllItems();
     }
 }

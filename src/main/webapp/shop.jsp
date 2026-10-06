@@ -1,15 +1,17 @@
 <%@ page contentType="text/html; charset=UTF-8" %>
 <%@ taglib uri="jakarta.tags.core" prefix="c" %>
-<%@ page import="application.*" %>
+<%@ page import="application.PermissionLevel" %>
+<%@ page import="application.dto.UserDTO" %>
 <%@ page import="presentation.Controller" %>
 <%@ page import="java.util.List" %>
+<%@ page import="application.dto.ItemDTO" %>
 <%
-    User user = (User) session.getAttribute("user");
+    UserDTO user = (UserDTO) session.getAttribute("user");
     if (user == null || user.getPermissionlevel() != PermissionLevel.Customer) {
         response.sendRedirect(request.getContextPath() + "/controller");
         return;
     }
-    List<Item> items = Controller.getAllItems();
+    List<ItemDTO> items = Controller.getAllItems();
     request.setAttribute("items", items);
 %>
 <!DOCTYPE html>

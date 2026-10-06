@@ -1,11 +1,12 @@
 <%@ page contentType="text/html; charset=UTF-8" %>
 <%@ taglib uri="jakarta.tags.core" prefix="c" %>
-<%@ page import="application.*" %>
+<%@ page import="application.PermissionLevel" %>
+<%@ page import="application.dto.UserDTO" %>
 <%@ page import="presentation.*" %>
 <%@ page import="java.sql.SQLException" %>
 
 <%
-    User user = (User) session.getAttribute("user");
+    UserDTO user = (UserDTO) session.getAttribute("user");
     String message = null;
 
     if(user == null) {
