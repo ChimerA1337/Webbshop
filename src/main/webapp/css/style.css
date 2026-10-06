@@ -328,7 +328,6 @@ td select {
     min-width: 140px;
 }
 
-/* Legacy admin table classes, restyled to match the shared table look */
 #adminUserTable,
 #adminItemTable {
     text-align: center;
@@ -350,7 +349,6 @@ td select {
     background: var(--surface-light);
 }
 
-/* ===== Responsive ===== */
 @media (max-width: 640px) {
     body {
         padding: 1.2em 0.6em 3em;
